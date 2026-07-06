@@ -1,5 +1,3 @@
-const SPREADSHEET_ID = '1O0Qlrt9C6AOu2P-BwKJMYdoIGbLFbeY45wDAFprTZ_w';
-
 /**
  * ウェブアプリのエントリーポイント
  * スプレッドシートのデータをHTMLテンプレートに渡してレンダリング
@@ -43,7 +41,7 @@ function doGet() {
  * 1行目をヘッダーとして使用
  */
 function getSheetData(sheetName) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName(sheetName);
   if (!sheet) return [];
 

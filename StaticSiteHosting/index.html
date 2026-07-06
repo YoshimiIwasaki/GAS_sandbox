@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:   #b71313;
+    --cyan:   #0b4488;
+    --light:  #f8f5ee;
+    --text:   #000000;
+    --muted:  #6b7f90;
+    --card-bg:#ffffff;
+    --radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .notice-bar {
+    background: #ffebeb;
+    border-bottom: 2px solid #b71313;
+    padding: 0 20px;
+  }
+  .notice-bar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .notice-item {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5c6c6;
+    font-size: 0.9rem;
+  }
+  .notice-item:last-child { border-bottom: none; }
+  .notice-badge {
+    flex-shrink: 0;
+    background: #b71313;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  .notice-title { font-weight: 700; }
+  .notice-body  { color: var(--muted); font-size: 0.85rem; margin-top: 1px; }
+  .notice-deadline {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%);
+    color: #fff;
+    text-align: center;
+    padding: 80px 20px 60px;
+  }
+  header .subtitle {
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+  header .wave { margin-top: 40px; line-height: 0; }
+  header .wave svg { display: block; width: 100%; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blue);
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 16px;
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s;
+  }
+  nav a:hover { border-bottom-color: var(--cyan); }
+
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  section h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--blue);
+    border-left: 5px solid var(--cyan);
+    padding-left: 16px;
+    margin-bottom: 40px;
+  }
+
+  .president-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.14); }
+  .card .photo-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #dce8f4;
+  }
+  .card .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card .photo-wrap .no-photo {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: #aac;
+  }
+  .card-body { padding: 16px; }
+  .card-body .gen { font-size: 0.75rem; font-weight: 700; color: var(--cyan); letter-spacing: 0.1em; }
+  .card-body .name { font-size: 1.1rem; font-weight: 800; margin: 4px 0 2px; }
+  .card-body .year { font-size: 0.8rem; color: var(--muted); margin-bottom: 10px; }
+  .card-body .comment {
+    font-size: 0.88rem; color: var(--text); line-height: 1.6;
+    border-top: 1px solid #e8f0f8; padding-top: 10px; white-space: pre-wrap;
+  }
+
+  #history { background: #fff; max-width: 100%; }
+  #history > div { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--cyan), var(--blue));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 36px;
+  }
+  .timeline-item:last-child { margin-bottom: 0; }
+  .timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--cyan);
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px var(--cyan);
+  }
+  .timeline-year {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .timeline-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .timeline-body {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  #schedule { background: var(--light); max-width: 100%; }
+  #schedule > div { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+
+  .event-list { display: flex; flex-direction: column; gap: 12px; }
+  .event {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    border-left: 4px solid var(--cyan);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .event .date { font-size: 1rem; font-weight: 800; color: var(--blue); white-space: nowrap; }
+  .event .event-title { font-weight: 700; font-size: 1rem; }
+  .event .detail { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .event .place { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+
+  footer {
+    background: var(--blue);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    .event { grid-template-columns: 60px 1fr; }
+    .event .place { grid-column: 2; margin-top: -4px; }
+    .notice-deadline { display: none; }
+  }
+  </style>
+</head>
+<body>
+
+  <? if (data.notices && data.notices.length > 0) { ?>
+  <div class="notice-bar">
+    <div class="notice-bar-inner">
+      <? data.notices.forEach(notice => { ?>
+      <div class="notice-item">
+        <span class="notice-badge">お知らせ</span>
+        <div>
+          <div class="notice-title"><?= notice['タイトル'] || '' ?></div>
+          <div class="notice-body"><?= notice['内容'] || '' ?></div>
+        </div>
+        <span class="notice-deadline"><?= notice['期限'] || '' ?></span>
+      </div>
+      <? }); ?>
+    </div>
+  </div>
+  <? } ?>
+  
+  <header>
+    <p class="subtitle">創部100周年記念</p>
+    <h1>水球部</h1>
+    <div class="wave">
+      <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8f5ee"/>
+      </svg>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#presidents">歴代部長</a>
+    <a href="#history">歴史</a>
+    <a href="#schedule">今後の予定</a>
+  </nav>
+
+  <section id="presidents">
+    <h2>歴代部長</h2>
+    <div class="president-grid">
+      <? if (data.presidents) { data.presidents.forEach(p => { ?>
+      <div class="card">
+        <div class="photo-wrap">
+          <? if (p['写真ID']) { ?>
+            <img src="https://drive.google.com/thumbnail?id=<?= p['写真ID'] ?>&sz=w400" alt="<?= p['氏名'] || '' ?>の写真" loading="lazy">
+          <? } else { ?>
+            <div class="no-photo">🏊</div>
+          <? } ?>
+        </div>
+        <div class="card-body">
+          <p class="gen"><?= p['代'] || '' ?></p>
+          <p class="name"><?= p['氏名'] || '' ?></p>
+          <p class="year"><?= p['年度'] || '' ?></p>
+          <p class="comment"><?= p['コメント'] || '' ?></p>
+        </div>
+      </div>
+      <? }); } ?>
+    </div>
+  </section>
+
+  <section id="history" style="max-width:100%; padding:0; background:#fff;">
+    <div>
+      <h2>部の歴史</h2>
+      <div class="timeline">
+        <? if (data.history) { data.history.forEach(h => { ?>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-year"><?= h['年'] || '' ?></p>
+          <p class="timeline-title"><?= h['タイトル'] || '' ?></p>
+          <p class="timeline-body"><?= h['内容'] || '' ?></p>
+        </div>
+        <? }); } ?>
+      </div>
+    </div>
+  </section>
+
+  <section id="schedule" style="max-width:100%; padding:0;">
+    <div>
+      <h2>今後の予定</h2>
+      <div class="event-list">
+        <? if (data.schedule) { data.schedule.forEach(e => { ?>
+        <div class="event">
+          <span class="date"><?= e['日付'] || '' ?></span>
+          <div>
+            <div class="event-title"><?= e['タイトル'] || '' ?></div>
+            <div class="detail"><?= e['詳細'] || '' ?></div>
+          </div>
+          <span class="place"><?= e['場所'] || '' ?></span>
+        </div>
+        <? }); } ?>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 水球部 創部100周年実行委員会</p>
+  </footer>
+
+</body>
+</html>

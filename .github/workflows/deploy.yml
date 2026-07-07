@@ -36,3 +36,4 @@ jobs:
       - name: Deploy to GAS
         run: |
           clasp push -f
+          clasp deploy -i AKfycbytBzooXxJI45BAAm-nuvVGriHGDdSuBjVcX2PK1n9xL81n5wGlCsWmSTKwRYHn4hjN

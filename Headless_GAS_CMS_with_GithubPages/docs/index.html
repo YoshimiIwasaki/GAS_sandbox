@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>水球部 創部100周年</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="notices-container"></div>
+
+    <header>
+        <p class="subtitle">創部100周年記念</p>
+        <h1>水球部</h1>
+        <div class="wave">
+            <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8f5ee" />
+            </svg>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#presidents">歴代部長</a>
+        <a href="#history">歴史</a>
+        <a href="#schedule">今後の予定</a>
+    </nav>
+
+    <main>
+        <div id="loading" style="text-align: center; padding: 50px; color: var(--blue);">
+            <p>データを読み込み中...</p>
+        </div>
+
+        <div id="content" style="display: none;">
+            <section id="presidents">
+                <div class="section-header">
+                    <h2>歴代部長</h2>
+                    <span class="badge">Presidents</span>
+                </div>
+                <div class="grid" id="presidents-grid"></div>
+            </section>
+
+            <section id="history" class="alt-bg">
+                <div class="section-header">
+                    <h2>歴史</h2>
+                    <span class="badge">History</span>
+                </div>
+                <div class="timeline" id="history-timeline"></div>
+            </section>
+
+            <section id="schedule">
+                <div class="section-header">
+                    <h2>今後の予定</h2>
+                    <span class="badge">Schedule</span>
+                </div>
+                <div class="events-list" id="schedules-list"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 水球部 創部100周年記念プロジェクト</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

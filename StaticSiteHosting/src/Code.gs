@@ -7,19 +7,21 @@ const SPREADSHEET_ID = '1O0Qlrt9C6AOu2P-BwKJMYdoIGbLFbeY45wDAFprTZ_w';
 function doGet() {
   const today = new Date();
 
-  const presidents = getSheetData('部長').filter(r => r['表示'] === true);
+  const isVisible = (val) => val === true || String(val).toUpperCase() === 'TRUE';
+
+  const presidents = getSheetData('部長').filter(r => isVisible(r['表示']));
 
   const schedules = getSheetData('予定')
-    .filter(r => r['表示'] === true)
+    .filter(r => isVisible(r['表示']))
     .sort((a, b) => new Date(a['日付']) - new Date(b['日付']));
 
   const history = getSheetData('歴史')
-    .filter(r => r['表示'] === true)
+    .filter(r => isVisible(r['表示']))
     .sort((a, b) => Number(a['年度']) - Number(b['年度']));
 
   const notices = getSheetData('お知らせ')
     .filter(r => {
-      if (!r['表示']) return false;
+      if (!isVisible(r['表示'])) return false;
       const start = r['表示開始日'] ? new Date(r['表示開始日']) : null;
       const end   = r['表示期限']   ? new Date(r['表示期限'])   : null;
       if (start && today < start) return false;

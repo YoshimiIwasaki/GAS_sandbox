@@ -1,9 +1,11 @@
-name: Deploy to GAS
+name: Deploy to GAS API
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'Headless_GAS_CMS_with_GithubPages/backend/**'
   workflow_dispatch:
 
 jobs:
@@ -12,10 +14,10 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./StaticSiteHosting
+        working-directory: ./Headless_GAS_CMS_with_GithubPages/backend
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -26,11 +28,10 @@ jobs:
       - name: Install clasp
         run: npm install -g @google/clasp
 
-      - name: Create ~/.clasprc.json
+      - name: Create .clasprc.json
         run: |
-          echo "$CLASPRC_JSON" > ~/.clasprc.json
-        env:
-          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+          echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+          chmod 600 ~/.clasprc.json
 
       - name: Deploy to GAS
         run: |
